@@ -37,7 +37,7 @@ func (c *Consumer) DeleteMessage(ctx context.Context, url string, receiptHandle 
 	return nil
 }
 
-func New(c Client) *Consumer {
+func NewConsumer(c Client) *Consumer {
 	return &Consumer{
 		client: c,
 	}

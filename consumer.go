@@ -12,10 +12,10 @@ type Consumer struct {
 	client Client
 }
 
-func (c *Consumer) GetMessages(ctx context.Context, url string) ([]types.Message, error) {
+func (c *Consumer) GetMessages(ctx context.Context, url string, batchSize int32) ([]types.Message, error) {
 	i := sqs.ReceiveMessageInput{
 		QueueUrl:            aws.String(url),
-		MaxNumberOfMessages: 10,
+		MaxNumberOfMessages: batchSize,
 	}
 	o, err := c.client.ReceiveMessage(ctx, &i)
 	if err != nil {
@@ -35,6 +35,15 @@ func (c *Consumer) DeleteMessage(ctx context.Context, url string, receiptHandle 
 		return err
 	}
 	return nil
+}
+
+func (c *Consumer) DeleteBatch(ctx context.Context, url string, entries []types.DeleteMessageBatchRequestEntry) (*sqs.DeleteMessageBatchOutput, error) {
+	i := sqs.DeleteMessageBatchInput{
+		QueueUrl: aws.String(url),
+		Entries:  entries,
+	}
+
+	return c.client.DeleteMessageBatch(ctx, &i)
 }
 
 func NewConsumer(c Client) *Consumer {

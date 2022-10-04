@@ -14,8 +14,9 @@ type Consumer struct {
 
 func (c *Consumer) GetMessages(ctx context.Context, url string, batchSize int32) ([]types.Message, error) {
 	i := sqs.ReceiveMessageInput{
-		QueueUrl:            aws.String(url),
-		MaxNumberOfMessages: batchSize,
+		QueueUrl:              aws.String(url),
+		MaxNumberOfMessages:   batchSize,
+		MessageAttributeNames: []string{"."},
 	}
 	o, err := c.client.ReceiveMessage(ctx, &i)
 	if err != nil {

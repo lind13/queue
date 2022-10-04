@@ -16,7 +16,7 @@ func (c *Consumer) GetMessages(ctx context.Context, url string, batchSize int32)
 	i := sqs.ReceiveMessageInput{
 		QueueUrl:              aws.String(url),
 		MaxNumberOfMessages:   batchSize,
-		MessageAttributeNames: []string{"."},
+		MessageAttributeNames: []string{"All"},
 	}
 	o, err := c.client.ReceiveMessage(ctx, &i)
 	if err != nil {
